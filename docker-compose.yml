@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+
+  price-service:
+    container_name: price-service
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8099:8099"
+    expose:
+      - 8099
+    volumes:
+      - ./:/app/app
+    restart: unless-stopped
+    networks:
+      - rabbitmq_nodejs
+
+networks:
+  rabbitmq_nodejs:
+    name: rabbitmq_nodejs
+    driver: bridge
+  auth-network:
+    driver: bridge
