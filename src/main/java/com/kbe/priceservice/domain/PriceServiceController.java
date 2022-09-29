@@ -1,6 +1,6 @@
 package com.kbe.priceservice.domain;
 
-import com.kbe.priceservice.config.ApplicationConfig;
+import com.kbe.priceservice.config.RabbitConfig;
 import com.kbe.priceservice.entity.PriceRequestCall;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,7 +16,7 @@ public class PriceServiceController {
     @Autowired
     private PriceServiceUtils priceServiceUtils;
 
-    @RabbitListener(queues = ApplicationConfig.QUEUEFORREQUESTS)
+    @RabbitListener(queues = RabbitConfig.QUEUEFORREQUESTS)
     private double receiveRequest(PriceRequestCall requestCall){
         return priceServiceUtils.sumPrices(requestCall);
     }
