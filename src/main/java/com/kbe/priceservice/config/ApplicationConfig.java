@@ -1,5 +1,7 @@
 package com.kbe.priceservice.config;
 
+import com.kbe.priceservice.domain.PriceServiceUtils;
+import com.kbe.priceservice.domain.PriceServiceUtilsImpl;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -9,10 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitConfig {
+public class ApplicationConfig {
 
     public static final String EXCHANGEFORANSWERS = "priceservice-answer-exchange";
-
     public static final String QUEUEFORANSWERS = "priceservice-answer-queue";
     public static final String QUEUEFORREQUESTS = "priceservice-request-queue";
     public static final String ANSWERROUTINGKEY = "output.productservice";
@@ -35,6 +36,8 @@ public class RabbitConfig {
         return BindingBuilder.bind(answerQueue()).to(exchange).with(ANSWERROUTINGKEY);
     }
 
+    @Bean
+    public PriceServiceUtils priceServiceUtils(){return new PriceServiceUtilsImpl();}
 
     @Bean
     public MessageConverter messageConverter(){
@@ -44,7 +47,7 @@ public class RabbitConfig {
     @Bean
     public AmqpTemplate template(ConnectionFactory connectionFactory){
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        template.setMessageConverter(messageConverter());//template.setMessageConverter(converter); //template.setMessageConverter(messageConverter());
+        template.setMessageConverter(messageConverter());
         return template;
     }
 
